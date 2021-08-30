@@ -1,0 +1,140 @@
+---
+swagger: "2.0"
+info:
+  description: "Wazidev mosquito repellent APIs"
+  version: "1.0.0"
+  title: "Mosquito Repellent"
+host: "127.0.0.1"
+basePath: "/mosquito_repellent"
+schemes:
+- "https"
+- "http"
+paths:
+  /status:
+    get:
+      tags:
+      - "status"
+      summary: "Returns status of mosquito repellent"
+      operationId: "get_status"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "object"
+            additionalProperties:
+              type: "integer"
+              format: "int32"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "swagger_server.controllers.status_controller"
+  /user/create:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      operationId: "create_user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "swagger_server.controllers.user_controller"
+  /user/token:
+    get:
+      tags:
+      - "user"
+      summary: "Create a token"
+      description: "This can only be done by a verified user."
+      operationId: "get_token"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - BasicAuth: []
+      x-swagger-router-controller: "swagger_server.controllers.user_controller"
+  /mosqutio/store:
+    post:
+      tags:
+      - "mosqutio"
+      summary: "Add a detected mosquito"
+      description: "This can only be done by a verified user."
+      operationId: "add_mosqutio"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "mosquito"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/Mosquito"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "swagger_server.controllers.mosqutio_controller"
+  /mosqutio/retive:
+    get:
+      tags:
+      - "mosqutio"
+      summary: "Get detected mosqutio data in given time frame"
+      operationId: "get_mosqutio"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "daterange"
+        required: false
+        schema:
+          $ref: "#/definitions/Daterange"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - Bearer: []
+      x-swagger-router-controller: "swagger_server.controllers.mosqutio_controller"
+securityDefinitions:
+  BasicAuth:
+    type: "basic"
+  Bearer:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+  Mosquito:
+    type: "object"
+    properties:
+      device_id:
+        type: "string"
+      specie:
+        type: "integer"
+  Daterange:
+    type: "object"
+    properties:
+      start_date:
+        type: "string"
+      end_date:
+        type: "string"

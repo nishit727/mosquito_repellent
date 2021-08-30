@@ -1,0 +1,8 @@
+connexion == 1.1.15
+python_dateutil == 2.6.0
+setuptools >= 21.0.0
+Werkzeug == 0.12.2
+flask == 0.10.1
+sqlite3
+passlib
+itsdangerous
